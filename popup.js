@@ -199,11 +199,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (bridgeOk && currentCmd !== '—') {
       try {
-        setStatus('🔧', 'Opening Terminal with install…');
-        if (!currentCmd.startsWith('#')) await bridgeInstall(currentCmd, project);
-        setStatus('📂', 'Opening VS Code…');
-        await bridgeOpenVSCode(project);
-        setStatus('✅', 'Terminal + VS Code opened — watch the install there');
+        setStatus('🔧', 'Opening VS Code + running install…');
+        await bridgeInstall(currentCmd, project);
+        setStatus('✅', 'VS Code opened — install running in integrated terminal');
         btn.textContent = '✅ Done!';
         btn.style.background = '#238636';
       } catch (e) {

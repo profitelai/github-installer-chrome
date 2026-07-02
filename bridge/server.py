@@ -150,7 +150,45 @@ def smart_detect(github_url):
     }
 
 
-# ── Visible Terminal (macOS) ─────────────────────────────────────────────────
+# ── VS Code integrated terminal ───────────────────────────────────────────────
+def open_vscode_terminal(command, project):
+    """
+    Open VS Code with the project, then inject the install command into its
+    integrated terminal via AppleScript keystrokes.
+    Needs Accessibility permission for whichever app runs this server.
+    """
+    vscode = EDITORS.get('vscode')
+    if not vscode:
+        return False, 'VS Code not found'
+
+    args = [vscode]
+    if project and os.path.isdir(project):
+        args.append(project)
+    subprocess.Popen(args)
+
+    safe_cmd = command.replace('\\', '\\\\').replace('"', '\\"')
+    script = f'''delay 3
+tell application "Visual Studio Code"
+    activate
+end tell
+delay 2
+tell application "System Events"
+    tell process "Code"
+        key code 50 using {{control down}}
+        delay 1.5
+        keystroke "{safe_cmd}"
+        delay 0.3
+        key code 36
+    end tell
+end tell'''
+    try:
+        subprocess.Popen(['osascript', '-e', script])
+        return True, None
+    except Exception as e:
+        return False, str(e)
+
+
+# ── Fallback: macOS Terminal.app ──────────────────────────────────────────────
 def open_terminal(command, cwd):
     safe_cwd = (cwd or os.path.expanduser('~')).replace("'", "\\'")
     safe_cmd = command.replace('"', '\\"')
@@ -265,7 +303,10 @@ class Handler(BaseHTTPRequestHandler):
                 self.respond({'ok': True, 'job_id': job_id, 'terminal': False})
                 return
 
-            ok, err = open_terminal(command, project)
+            # Prefer VS Code integrated terminal; fall back to Terminal.app
+            ok, err = open_vscode_terminal(command, project)
+            if not ok:
+                ok, err = open_terminal(command, project)
             if ok:
                 jobs[job_id] = {'status': 'terminal', 'output': [], 'error': None}
                 self.respond({'ok': True, 'job_id': job_id, 'terminal': True})
@@ -282,7 +323,7 @@ class Handler(BaseHTTPRequestHandler):
             editor  = body.get('editor', 'cursor')
 
             if command and not command.startswith('#'):
-                open_terminal(command, project)
+                open_vscode_terminal(command, project)
 
             ok, err = open_editor(editor, project)
 
