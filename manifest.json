@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
   "name": "GitHub Installer",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Install any GitHub repository into VS Code in one click — auto-detects brew, pip, npm, cargo and more",
-  "permissions": ["tabs", "activeTab", "storage", "scripting", "clipboardWrite"],
+  "permissions": ["tabs", "activeTab", "storage", "clipboardWrite"],
   "host_permissions": [
     "http://localhost:9876/*",
     "https://github.com/*",
@@ -28,7 +28,7 @@
   "commands": {
     "install-vscode": {
       "suggested_key": { "default": "Ctrl+Shift+V", "mac": "Command+Shift+V" },
-      "description": "Install package → VS Code"
+      "description": "Install package into VS Code"
     },
     "copy-install-cmd": {
       "suggested_key": { "default": "Ctrl+Shift+C", "mac": "Command+Shift+C" },
@@ -37,7 +37,7 @@
   },
   "action": {
     "default_popup": "popup.html",
-    "default_title": "AI Dev Installer — click to install",
+    "default_title": "GitHub Installer — click to install",
     "default_icon": {
       "16": "icons/icon16.png",
       "32": "icons/icon32.png",
