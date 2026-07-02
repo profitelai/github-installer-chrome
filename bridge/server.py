@@ -153,8 +153,8 @@ def smart_detect(github_url):
 # ── VS Code integrated terminal ───────────────────────────────────────────────
 def open_vscode_terminal(command, project):
     """
-    Open VS Code with the project, then inject the install command into its
-    integrated terminal via AppleScript keystrokes.
+    Open VS Code with the project, open its integrated terminal via the
+    Terminal menu, then type and run the install command.
     Needs Accessibility permission for whichever app runs this server.
     """
     vscode = EDITORS.get('vscode')
@@ -174,7 +174,7 @@ end tell
 delay 2
 tell application "System Events"
     tell process "Code"
-        key code 50 using {{control down}}
+        click menu item "New Terminal" of menu "Terminal" of menu bar 1
         delay 1.5
         keystroke "{safe_cmd}"
         delay 0.3
