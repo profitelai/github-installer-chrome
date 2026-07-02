@@ -18,9 +18,18 @@ def _find_editor(names):
     return None
 
 EDITORS = {
-    'vscode':  _find_editor(['code', '/usr/local/bin/code', '/opt/homebrew/bin/code']),
-    'cursor':  _find_editor(['cursor', '/usr/local/bin/cursor',
-                             '/Applications/Cursor.app/Contents/MacOS/Cursor']),
+    'vscode':  _find_editor([
+        'code',
+        '/usr/local/bin/code',
+        '/opt/homebrew/bin/code',
+        '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code',
+    ]),
+    'cursor':  _find_editor([
+        'cursor',
+        '/usr/local/bin/cursor',
+        '/Applications/Cursor.app/Contents/MacOS/Cursor',
+        '/Applications/Cursor.app/Contents/Resources/app/bin/cursor',
+    ]),
 }
 
 # ── Install job state ────────────────────────────────────────────────────────
